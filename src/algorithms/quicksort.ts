@@ -15,7 +15,7 @@ const shuffle = (arr: any[]) => {
 const partition = (arr: number[], lo: number, hi: number) => {
   let i = lo,
     j = hi + 1;
-  let v = arr[lo];
+  const v = arr[lo];
   while (true) {
     while (arr[++i] < v) if (i === hi) break;
     while (v < arr[--j]) if (j === lo) break;
