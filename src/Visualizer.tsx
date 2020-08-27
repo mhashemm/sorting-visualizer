@@ -47,8 +47,8 @@ export const Visualizer: FC<VisualizerProps> = (props) => {
   };
 
   const speedHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.currentTarget.value);
-    setSpeed(() => (+e.currentTarget.value < 1 ? 1 : +e.currentTarget.value));
+    console.log(e.target);
+    setSpeed(+e.target.value < 1 ? 1 : +e.target.value);
   };
 
   return (
@@ -72,7 +72,7 @@ export const Visualizer: FC<VisualizerProps> = (props) => {
           type="number"
           min="1"
           onChange={speedHandler}
-          defaultValue={speed}
+          value={speed}
         />
         <button onClick={newArray}>Generate Array</button>
         <button onClick={mergeSortHandler}>Merge Sort</button>
