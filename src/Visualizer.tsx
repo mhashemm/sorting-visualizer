@@ -1,4 +1,5 @@
 import React, { FC, useState, useRef } from "react";
+import { sleep } from "./sleep";
 import { mergeSortSteps } from "./algorithms/mergeSort";
 import { quicksort } from "./algorithms/quicksort";
 
@@ -28,23 +29,21 @@ export const Visualizer: FC<VisualizerProps> = (props) => {
     setArr(generateArray());
   };
 
-  const mergeSortHandler = () => {
+  const mergeSortHandler = async () => {
     const steps = mergeSortSteps(arr);
     const lines = linesRef.current!.children as any;
-    steps.forEach(([lo, hi], index) => {
-      const isColorChanged = index % 3 !== 2;
+    for (let i = 0; i < steps.length; i++) {
+      const [lo, hi] = steps[i];
+      const isColorChanged = i % 3 !== 2;
       if (isColorChanged) {
-        const color = index % 3 === 0 ? CHANGED_COLOR : MAIN_COLOR;
-        setTimeout(() => {
-          lines[lo].style.backgroundColor = color;
-          lines[hi].style.backgroundColor = color;
-        }, index * speed);
+        const color = i % 3 === 0 ? CHANGED_COLOR : MAIN_COLOR;
+        lines[lo].style.backgroundColor = color;
+        lines[hi].style.backgroundColor = color;
       } else {
-        setTimeout(() => {
-          lines[lo].style.height = `${hi}px`;
-        }, index * speed);
+        lines[lo].style.height = `${hi}px`;
       }
-    });
+      await sleep(speed);
+    }
   };
 
   const quickSortHandler = () => {
