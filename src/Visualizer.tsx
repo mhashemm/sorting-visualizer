@@ -1,5 +1,6 @@
 import React, { FC, useState, useRef } from "react";
 import { mergeSortSteps } from "./algorithms/mergeSort";
+import { quicksort } from "./algorithms/quicksort";
 
 export interface VisualizerProps {}
 
@@ -46,8 +47,11 @@ export const Visualizer: FC<VisualizerProps> = (props) => {
     });
   };
 
+  const quickSortHandler = () => {
+    setArr(quicksort(arr));
+  };
+
   const speedHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target);
     setSpeed(+e.target.value < 1 ? 1 : +e.target.value);
   };
 
@@ -75,7 +79,8 @@ export const Visualizer: FC<VisualizerProps> = (props) => {
           value={speed}
         />
         <button onClick={newArray}>Generate Array</button>
-        <button onClick={mergeSortHandler}>Merge Sort</button>
+        <button onClick={mergeSortHandler}>MergeSort</button>
+        <button onClick={quickSortHandler}>QuickSort</button>
       </div>
     </>
   );
