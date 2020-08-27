@@ -5,11 +5,17 @@ import { quicksort } from "./algorithms/quicksort";
 
 export interface VisualizerProps {}
 
+const MAIN_COLOR = "black";
+const CHANGED_COLOR = "red";
+const LINE_WIDTH = 20;
+
 const randomInteger = (min: number, max: number) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-const generateArray = (size: number = 370, max: number = 800) => {
+const generateArray = () => {
+  const max = 800;
+  const size = Math.floor((window.innerWidth - 40) / LINE_WIDTH);
   const arr = Array(size);
   for (let i = 0; i < size; i++) {
     arr[i] = randomInteger(10, max);
@@ -17,12 +23,10 @@ const generateArray = (size: number = 370, max: number = 800) => {
   return arr;
 };
 
-const MAIN_COLOR = "blueviolet";
-const CHANGED_COLOR = "red";
-
 export const Visualizer: FC<VisualizerProps> = (props) => {
   const [arr, setArr] = useState(generateArray());
   const [speed, setSpeed] = useState(1);
+  const [isSorting, setIsSorting] = useState(false);
   const linesRef = useRef<HTMLDivElement>(null);
 
   const newArray = () => {
@@ -30,9 +34,11 @@ export const Visualizer: FC<VisualizerProps> = (props) => {
   };
 
   const mergeSortHandler = async () => {
+    setIsSorting(true);
     const steps = mergeSortSteps(arr);
     const lines = linesRef.current!.children as any;
-    for (let i = 0; i < steps.length; i++) {
+    const n = steps.length;
+    for (let i = 0; i < n; i++) {
       const [lo, hi] = steps[i];
       const isColorChanged = i % 3 !== 2;
       if (isColorChanged) {
@@ -44,10 +50,13 @@ export const Visualizer: FC<VisualizerProps> = (props) => {
       }
       await sleep(speed);
     }
+    setIsSorting(false);
   };
 
-  const quickSortHandler = () => {
-    setArr(quicksort(arr));
+  const quickSortHandler = async () => {
+    const steps = quicksort(arr);
+    const lines = linesRef.current!.children as any;
+    const n = steps.length;
   };
 
   const speedHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,6 +72,8 @@ export const Visualizer: FC<VisualizerProps> = (props) => {
             className="line"
             style={{
               height: `${el}px`,
+              backgroundColor: MAIN_COLOR,
+              width: LINE_WIDTH,
             }}
           ></div>
         ))}
@@ -76,10 +87,17 @@ export const Visualizer: FC<VisualizerProps> = (props) => {
           min="1"
           onChange={speedHandler}
           value={speed}
+          disabled={isSorting}
         />
-        <button onClick={newArray}>Generate Array</button>
-        <button onClick={mergeSortHandler}>MergeSort</button>
-        <button onClick={quickSortHandler}>QuickSort</button>
+        <button onClick={newArray} disabled={isSorting}>
+          Generate Array
+        </button>
+        <button onClick={mergeSortHandler} disabled={isSorting}>
+          MergeSort
+        </button>
+        <button onClick={quickSortHandler} disabled={isSorting}>
+          QuickSort
+        </button>
       </div>
     </>
   );

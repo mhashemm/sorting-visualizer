@@ -24,6 +24,7 @@ const partition = (arr: number[], lo: number, hi: number, steps: any[]) => {
       if (j === lo) break;
     }
     if (i >= j) break;
+    swap(arr, i, j);
   }
   swap(arr, lo, j);
   return j;
@@ -38,7 +39,7 @@ const sort = (arr: number[], lo: number, hi: number, steps: any[]) => {
 
 export const quicksort = (arr: number[]) => {
   // shuffle(arr);
-  const steps: any = [];
+  const steps: any[] = [];
   sort(arr, 0, arr.length - 1, steps);
-  return [...arr];
+  return steps;
 };
