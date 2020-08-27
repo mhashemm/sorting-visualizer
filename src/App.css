@@ -20,3 +20,16 @@
   background-color: blueviolet;
   width: 4px;
 }
+
+input {
+  width: 50px;
+}
+
+button,
+input {
+  padding: 4px;
+}
+
+.buttons > :not(:last-child) {
+  margin-right: 5px;
+}

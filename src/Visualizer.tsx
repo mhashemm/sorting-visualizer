@@ -18,10 +18,9 @@ const generateArray = (size: number = 370, max: number = 800) => {
 const MAIN_COLOR = "blueviolet";
 const CHANGED_COLOR = "red";
 
-const SPEED = 1000;
-
 export const Visualizer: FC<VisualizerProps> = (props) => {
   const [arr, setArr] = useState(generateArray());
+  const [speed, setSpeed] = useState(1);
   const linesRef = useRef<HTMLDivElement>(null);
 
   const newArray = () => {
@@ -38,13 +37,18 @@ export const Visualizer: FC<VisualizerProps> = (props) => {
         setTimeout(() => {
           lines[lo].style.backgroundColor = color;
           lines[hi].style.backgroundColor = color;
-        }, index * SPEED);
+        }, index * speed);
       } else {
         setTimeout(() => {
           lines[lo].style.height = `${hi}px`;
-        }, index * SPEED);
+        }, index * speed);
       }
     });
+  };
+
+  const speedHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(e.currentTarget.value);
+    setSpeed(() => (+e.currentTarget.value < 1 ? 1 : +e.currentTarget.value));
   };
 
   return (
@@ -61,6 +65,15 @@ export const Visualizer: FC<VisualizerProps> = (props) => {
         ))}
       </div>
       <div className="buttons">
+        <label htmlFor="speed">Speed</label>
+        <input
+          id="speed"
+          name="speed"
+          type="number"
+          min="1"
+          onChange={speedHandler}
+          defaultValue={speed}
+        />
         <button onClick={newArray}>Generate Array</button>
         <button onClick={mergeSortHandler}>Merge Sort</button>
       </div>
