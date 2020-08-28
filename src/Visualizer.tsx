@@ -56,7 +56,7 @@ export const Visualizer: FC<VisualizerProps> = (props) => {
 
   const quickSortHandler = async () => {
     setIsSorting(true);
-    const steps = quicksort(arr);
+    const steps = quicksort([...arr]);
     const lines = linesRef.current!.children as any;
     const n = steps.length;
     for (let i = 0; i < n; i++) {
@@ -81,7 +81,7 @@ export const Visualizer: FC<VisualizerProps> = (props) => {
         lines[lo].style.backgroundColor = MAIN_COLOR;
         lines[hi].style.backgroundColor = MAIN_COLOR;
       }
-      // await sleep(speed);
+      await sleep(speed);
     }
     setIsSorting(false);
   };
