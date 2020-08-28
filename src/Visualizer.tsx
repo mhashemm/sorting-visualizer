@@ -7,7 +7,8 @@ export interface VisualizerProps {}
 
 const MAIN_COLOR = "black";
 const CHANGED_COLOR = "red";
-const LINE_WIDTH = 20;
+const SECOND_CHANGED_COLOR = "yellow";
+const LINE_WIDTH = 1;
 
 const randomInteger = (min: number, max: number) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -35,7 +36,7 @@ export const Visualizer: FC<VisualizerProps> = (props) => {
 
   const mergeSortHandler = async () => {
     setIsSorting(true);
-    const steps = mergeSortSteps(arr);
+    const steps = mergeSortSteps([...arr]);
     const lines = linesRef.current!.children as any;
     const n = steps.length;
     for (let i = 0; i < n; i++) {
@@ -57,6 +58,30 @@ export const Visualizer: FC<VisualizerProps> = (props) => {
     const steps = quicksort(arr);
     const lines = linesRef.current!.children as any;
     const n = steps.length;
+    for (let i = 0; i < n; i++) {
+      const {
+        role,
+        indexs: [lo, hi],
+      } = steps[i];
+
+      if (role === "swap") {
+        lines[lo].style.backgroundColor = SECOND_CHANGED_COLOR;
+        lines[hi].style.backgroundColor = SECOND_CHANGED_COLOR;
+        const temp = lines[lo].style.height;
+        lines[lo].style.height = lines[hi].style.height;
+        lines[hi].style.height = temp;
+        await sleep(speed);
+        lines[lo].style.backgroundColor = MAIN_COLOR;
+        lines[hi].style.backgroundColor = MAIN_COLOR;
+      } else if (role === "color") {
+        lines[lo].style.backgroundColor = CHANGED_COLOR;
+        lines[hi].style.backgroundColor = CHANGED_COLOR;
+      } else if (role === "discolor") {
+        lines[lo].style.backgroundColor = MAIN_COLOR;
+        lines[hi].style.backgroundColor = MAIN_COLOR;
+      }
+      // await sleep(speed);
+    }
   };
 
   const speedHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
