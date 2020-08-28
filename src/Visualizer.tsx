@@ -55,6 +55,7 @@ export const Visualizer: FC<VisualizerProps> = (props) => {
   };
 
   const quickSortHandler = async () => {
+    setIsSorting(true);
     const steps = quicksort(arr);
     const lines = linesRef.current!.children as any;
     const n = steps.length;
@@ -82,6 +83,7 @@ export const Visualizer: FC<VisualizerProps> = (props) => {
       }
       // await sleep(speed);
     }
+    setIsSorting(false);
   };
 
   const speedHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
