@@ -18,6 +18,8 @@ const shuffle = (arr: any[]) => {
 };
 
 const partition = (arr: number[], lo: number, hi: number, steps: ISteps[]) => {
+  steps.push({ role: "color", indexs: [lo, lo] });
+
   let i = lo,
     j = hi + 1;
   const v = arr[lo];
@@ -26,20 +28,21 @@ const partition = (arr: number[], lo: number, hi: number, steps: ISteps[]) => {
     while (v < arr[--j]) if (j === lo) break;
     if (i >= j) break;
     steps.push({ role: "swap", indexs: [i, j] });
+    steps.push({ role: "discolor", indexs: [i, j] });
     swap(arr, i, j);
   }
   steps.push({ role: "swap", indexs: [lo, j] });
+  steps.push({ role: "discolor", indexs: [lo, j] });
   swap(arr, lo, j);
+
   return j;
 };
 
 const sort = (arr: number[], lo: number, hi: number, steps: ISteps[]) => {
   if (hi <= lo) return;
   const j = partition(arr, lo, hi, steps);
-  steps.push({ role: "color", indexs: [j, j] });
   sort(arr, lo, j - 1, steps);
   sort(arr, j + 1, hi, steps);
-  steps.push({ role: "discolor", indexs: [j, j] });
 };
 
 export const quicksort = (arr: number[]) => {

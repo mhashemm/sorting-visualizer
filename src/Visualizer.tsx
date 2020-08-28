@@ -8,7 +8,7 @@ export interface VisualizerProps {}
 const MAIN_COLOR = "black";
 const CHANGED_COLOR = "red";
 const SECOND_CHANGED_COLOR = "yellow";
-const LINE_WIDTH = 1;
+const LINE_WIDTH = 4;
 
 const randomInteger = (min: number, max: number) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -71,9 +71,6 @@ export const Visualizer: FC<VisualizerProps> = (props) => {
         const temp = lines[lo].style.height;
         lines[lo].style.height = lines[hi].style.height;
         lines[hi].style.height = temp;
-        await sleep(speed);
-        lines[lo].style.backgroundColor = MAIN_COLOR;
-        lines[hi].style.backgroundColor = MAIN_COLOR;
       } else if (role === "color") {
         lines[lo].style.backgroundColor = CHANGED_COLOR;
         lines[hi].style.backgroundColor = CHANGED_COLOR;
