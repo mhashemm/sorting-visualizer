@@ -1,14 +1,15 @@
-import React, { FC, useState, useRef } from "react";
-import { sleep } from "./sleep";
-import { mergeSortSteps } from "./algorithms/mergeSort";
-import { quicksort } from "./algorithms/quicksort";
+import React, { FC, useState, useRef } from 'react';
+import { sleep } from './sleep';
+import { MergeSort } from './algorithms/MergeSort';
+import { QuickSort } from './algorithms/QuickSort';
+import { HeapSort } from './algorithms/HeapSort';
 
 export interface VisualizerProps {}
 
-const MAIN_COLOR = "black";
-const CHANGED_COLOR = "red";
-const SECOND_CHANGED_COLOR = "yellow";
-const LINE_WIDTH = 4;
+const MAIN_COLOR = 'black';
+const COLOR = 'red';
+const SWAP_COLOR = 'yellow';
+const LINE_WIDTH = 20;
 
 const randomInteger = (min: number, max: number) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -17,7 +18,7 @@ const randomInteger = (min: number, max: number) => {
 const generateArray = () => {
   const max = 800;
   const size = Math.floor((window.innerWidth - 40) / LINE_WIDTH);
-  const arr = Array(size);
+  const arr = new Array<number>(size);
   for (let i = 0; i < size; i++) {
     arr[i] = randomInteger(10, max);
   }
@@ -26,7 +27,7 @@ const generateArray = () => {
 
 export const Visualizer: FC<VisualizerProps> = (props) => {
   const [arr, setArr] = useState(generateArray());
-  const [speed, setSpeed] = useState(1);
+  const [speed, setSpeed] = useState(10);
   const [isSorting, setIsSorting] = useState(false);
   const linesRef = useRef<HTMLDivElement>(null);
 
@@ -34,52 +35,37 @@ export const Visualizer: FC<VisualizerProps> = (props) => {
     setArr(generateArray());
   };
 
-  const mergeSortHandler = async () => {
+  const visualize = async (Sort: any) => {
     setIsSorting(true);
-    const steps = mergeSortSteps([...arr]);
-    const lines = linesRef.current!.children as any;
-    const n = steps.length;
-    for (let i = 0; i < n; i++) {
-      const [lo, hi] = steps[i];
-      const isColorChanged = i % 3 !== 2;
-      if (isColorChanged) {
-        const color = i % 3 === 0 ? CHANGED_COLOR : MAIN_COLOR;
-        lines[lo].style.backgroundColor = color;
-        lines[hi].style.backgroundColor = color;
-      } else {
-        lines[lo].style.height = `${hi}px`;
-      }
-      await sleep(speed);
-    }
-    setIsSorting(false);
-  };
-
-  const quickSortHandler = async () => {
-    setIsSorting(true);
-    const steps = quicksort([...arr]);
+    const sort = new Sort(arr);
+    const steps = sort.getSteps();
     const lines = linesRef.current!.children as any;
     const n = steps.length;
     for (let i = 0; i < n; i++) {
       const {
         role,
-        indexs: [lo, hi],
+        indexes: [lo, hi],
       } = steps[i];
 
-      if (role === "swap") {
-        lines[lo].style.backgroundColor = SECOND_CHANGED_COLOR;
-        lines[hi].style.backgroundColor = SECOND_CHANGED_COLOR;
+      if (role === 'swap') {
+        lines[lo].style.backgroundColor = SWAP_COLOR;
+        lines[hi].style.backgroundColor = SWAP_COLOR;
         const temp = lines[lo].style.height;
         lines[lo].style.height = lines[hi].style.height;
         lines[hi].style.height = temp;
-      } else if (role === "color") {
-        lines[lo].style.backgroundColor = CHANGED_COLOR;
-        lines[hi].style.backgroundColor = CHANGED_COLOR;
-      } else if (role === "discolor") {
+      } else if (role === 'color') {
+        lines[lo].style.backgroundColor = COLOR;
+        lines[hi].style.backgroundColor = COLOR;
+      } else if (role === 'discolor') {
         lines[lo].style.backgroundColor = MAIN_COLOR;
         lines[hi].style.backgroundColor = MAIN_COLOR;
+      } else if (role === 'put') {
+        lines[lo].style.height = `${hi}px`;
       }
+
       await sleep(speed);
     }
+    setArr(sort.getArr());
     setIsSorting(false);
   };
 
@@ -103,7 +89,7 @@ export const Visualizer: FC<VisualizerProps> = (props) => {
         ))}
       </div>
       <div className="buttons">
-        <label htmlFor="speed">Speed</label>
+        <label htmlFor="speed">Speed in MS</label>
         <input
           id="speed"
           name="speed"
@@ -116,11 +102,14 @@ export const Visualizer: FC<VisualizerProps> = (props) => {
         <button onClick={newArray} disabled={isSorting}>
           Generate Array
         </button>
-        <button onClick={mergeSortHandler} disabled={isSorting}>
+        <button onClick={() => visualize(MergeSort)} disabled={isSorting}>
           MergeSort
         </button>
-        <button onClick={quickSortHandler} disabled={isSorting}>
+        <button onClick={() => visualize(QuickSort)} disabled={isSorting}>
           QuickSort
+        </button>
+        <button onClick={() => visualize(HeapSort)} disabled={isSorting}>
+          HeapSort
         </button>
       </div>
     </>
