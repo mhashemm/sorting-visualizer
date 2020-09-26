@@ -3,16 +3,8 @@ import { Sort } from './Sort';
 export class QuickSort extends Sort {
   constructor(arr: number[]) {
     super(arr);
-    this.steps = [];
     if (!this.isSorted()) {
       this.sort(0, this.n - 1);
-    }
-  }
-
-  private suffle() {
-    for (let i = 0; i < this.n; i++) {
-      const r = Math.floor(Math.random() * (i + 1));
-      this.swap(r, i);
     }
   }
 
