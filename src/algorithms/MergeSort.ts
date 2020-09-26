@@ -32,24 +32,28 @@ export class MergeSort extends Sort {
         this.steps.push({ role: 'color', indexes: [j, j] });
         this.steps.push({ role: 'discolor', indexes: [j, j] });
         this.steps.push({ role: 'put', indexes: [k, this.aux[j]] });
+        this.steps.push({ role: 'discolor', indexes: [k, k] });
         ////////////////////////
         this.arr[k] = this.aux[j++];
       } else if (j > hi) {
         this.steps.push({ role: 'color', indexes: [i, i] });
         this.steps.push({ role: 'discolor', indexes: [i, i] });
         this.steps.push({ role: 'put', indexes: [k, this.aux[i]] });
+        this.steps.push({ role: 'discolor', indexes: [k, k] });
         ////////////////////////
         this.arr[k] = this.aux[i++];
       } else if (this.less(this.aux[j], this.aux[i])) {
         this.steps.push({ role: 'color', indexes: [i, j] });
         this.steps.push({ role: 'discolor', indexes: [i, j] });
         this.steps.push({ role: 'put', indexes: [k, this.aux[j]] });
+        this.steps.push({ role: 'discolor', indexes: [k, k] });
         ////////////////////////
         this.arr[k] = this.aux[j++];
       } else {
         this.steps.push({ role: 'color', indexes: [i, j] });
         this.steps.push({ role: 'discolor', indexes: [i, j] });
         this.steps.push({ role: 'put', indexes: [k, this.aux[i]] });
+        this.steps.push({ role: 'discolor', indexes: [k, k] });
         ////////////////////////
         this.arr[k] = this.aux[i++];
       }

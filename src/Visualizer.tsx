@@ -39,7 +39,7 @@ export const Visualizer: FC<VisualizerProps> = (props) => {
     setIsSorting(true);
     const sort = new Sort(arr);
     const steps = sort.getSteps();
-    const lines = linesRef.current!.children as any;
+    const lines = linesRef.current!.children;
     const n = steps.length;
     for (let i = 0; i < n; i++) {
       const {
@@ -47,20 +47,24 @@ export const Visualizer: FC<VisualizerProps> = (props) => {
         indexes: [lo, hi],
       } = steps[i];
 
+      const loEl = lines.item(lo) as HTMLDivElement;
+      const hiEl = lines.item(hi) as HTMLDivElement;
+
       if (role === 'swap') {
-        lines[lo].style.backgroundColor = SWAP_COLOR;
-        lines[hi].style.backgroundColor = SWAP_COLOR;
-        const temp = lines[lo].style.height;
-        lines[lo].style.height = lines[hi].style.height;
-        lines[hi].style.height = temp;
+        loEl.style.backgroundColor = SWAP_COLOR;
+        hiEl.style.backgroundColor = SWAP_COLOR;
+        const temp = loEl.style.height;
+        loEl.style.height = hiEl.style.height;
+        hiEl.style.height = temp;
       } else if (role === 'color') {
-        lines[lo].style.backgroundColor = COLOR;
-        lines[hi].style.backgroundColor = COLOR;
+        loEl.style.backgroundColor = COLOR;
+        hiEl.style.backgroundColor = COLOR;
       } else if (role === 'discolor') {
-        lines[lo].style.backgroundColor = MAIN_COLOR;
-        lines[hi].style.backgroundColor = MAIN_COLOR;
+        loEl.style.backgroundColor = MAIN_COLOR;
+        hiEl.style.backgroundColor = MAIN_COLOR;
       } else if (role === 'put') {
-        lines[lo].style.height = `${hi}px`;
+        loEl.style.backgroundColor = SWAP_COLOR;
+        loEl.style.height = `${hi}px`;
       }
 
       await sleep(speed);
