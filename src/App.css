@@ -13,6 +13,10 @@
   min-height: 90vh;
 }
 
+.line {
+  transition: height 200ms;
+}
+
 input {
   width: 50px;
 }

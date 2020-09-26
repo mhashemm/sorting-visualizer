@@ -9,7 +9,7 @@ export interface VisualizerProps {}
 const MAIN_COLOR = 'black';
 const COLOR = 'red';
 const SWAP_COLOR = 'yellow';
-const LINE_WIDTH = 4;
+const LINE_WIDTH = 10;
 
 const randomInteger = (min: number, max: number) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
