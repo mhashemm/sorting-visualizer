@@ -1,5 +1,6 @@
 import React, { FC, useState, useRef } from 'react';
 import { sleep } from './sleep';
+import { Sort } from './algorithms/Sort';
 import { MergeSort } from './algorithms/MergeSort';
 import { QuickSort } from './algorithms/QuickSort';
 import { HeapSort } from './algorithms/HeapSort';
@@ -10,14 +11,16 @@ const MAIN_COLOR = 'black';
 const COLOR = 'red';
 const SWAP_COLOR = 'yellow';
 const LINE_WIDTH = 10;
+const WIDTH = window.innerWidth;
+const HEIGHT = window.innerHeight;
 
 const randomInteger = (min: number, max: number) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
 const generateArray = () => {
-  const max = 800;
-  const size = Math.floor((window.innerWidth - 40) / LINE_WIDTH);
+  const max = HEIGHT * 0.9;
+  const size = Math.floor((WIDTH - 40) / LINE_WIDTH);
   const arr = new Array<number>(size);
   for (let i = 0; i < size; i++) {
     arr[i] = randomInteger(10, max);
@@ -27,7 +30,7 @@ const generateArray = () => {
 
 export const Visualizer: FC<VisualizerProps> = (props) => {
   const [arr, setArr] = useState(generateArray());
-  const [speed, setSpeed] = useState(10);
+  const [speed, setSpeed] = useState(1);
   const [isSorting, setIsSorting] = useState(false);
   const linesRef = useRef<HTMLDivElement>(null);
 
@@ -35,9 +38,8 @@ export const Visualizer: FC<VisualizerProps> = (props) => {
     setArr(generateArray());
   };
 
-  const visualize = async (Sort: any) => {
+  const visualize = async (sort: Sort) => {
     setIsSorting(true);
-    const sort = new Sort(arr);
     const steps = sort.getSteps();
     const lines = linesRef.current!.children;
     const n = steps.length;
@@ -93,7 +95,7 @@ export const Visualizer: FC<VisualizerProps> = (props) => {
         ))}
       </div>
       <div className="buttons">
-        <label htmlFor="speed">Speed in MS</label>
+        <label htmlFor="speed">Delay in MS</label>
         <input
           id="speed"
           name="speed"
@@ -106,13 +108,22 @@ export const Visualizer: FC<VisualizerProps> = (props) => {
         <button onClick={newArray} disabled={isSorting}>
           Generate Array
         </button>
-        <button onClick={() => visualize(MergeSort)} disabled={isSorting}>
+        <button
+          onClick={() => visualize(new MergeSort(arr))}
+          disabled={isSorting}
+        >
           MergeSort
         </button>
-        <button onClick={() => visualize(QuickSort)} disabled={isSorting}>
+        <button
+          onClick={() => visualize(new QuickSort(arr))}
+          disabled={isSorting}
+        >
           QuickSort
         </button>
-        <button onClick={() => visualize(HeapSort)} disabled={isSorting}>
+        <button
+          onClick={() => visualize(new HeapSort(arr))}
+          disabled={isSorting}
+        >
           HeapSort
         </button>
       </div>
